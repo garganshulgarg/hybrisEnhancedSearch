@@ -7,6 +7,12 @@ This project aims for extending solr search delivered OOTB with SAP Hybris. This
 Much More
 
 
+Just to have a quick glance refer the video on following Link.
+https://www.useloom.com/share/7f91e3a0c136422bb560bebe143f3c48
+
+Please ignore the UI for now !! will improve the same over the period of time.
+
+
 
 
 
