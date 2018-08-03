@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<!--
+	ATTENTION: This is just an example file. You have to edit it according to your needs.
+-->
+
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="items.xsd">
+
+    <enumtypes>
+        <!-- Create an enumtype for future types of search. Initially only pages
+            with type contentSearch will be index for content searches. -->
+        <enumtype code="SearchType" autocreate="true" generate="true"
+                  dynamic="true">
+            <value code="contentSearch"/>
+        </enumtype>
+    </enumtypes>
+
+    <itemtypes>
+        <itemtype code="ContentPage" autocreate="false" generate="false">
+            <description>Extends existing type to include the type of search that should look for this page.
+            </description>
+            <attributes>
+                <attribute qualifier="searchType" type="SearchType">
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+
+        <itemtype code="SearchBoxComponent" autocreate="false"
+                  generate="false">
+            <description>Extends existing type to include content search results on the autocomplete box</description>
+            <attributes>
+                <attribute qualifier="displayContent" type="boolean">
+                    <persistence type="property"/>
+                    <modifiers optional="false"/>
+                    <defaultvalue>Boolean.FALSE</defaultvalue>
+                    <description>Determines if content search results are displayed in the component.</description>
+                </attribute>
+                <attribute qualifier="maxContent" type="java.lang.Integer">
+                    <persistence type="property"/>
+                    <modifiers optional="false"/>
+                    <defaultvalue>java.lang.Integer.valueOf(5)</defaultvalue>
+                    <description>Determines the max number of content search results to display in the component.
+                    </description>
+                </attribute>
+
+            </attributes>
+        </itemtype>
+
+        <itemtype code="BaseSite" autocreate="false" generate="false">
+            <description>Extending BaseSite type with additional attributes.</description>
+            <attributes>
+                <attribute type="SolrFacetSearchConfig" qualifier="solrContentFacetSearchConfiguration">
+                    <description>Solr content search configuration for this site.</description>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+    </itemtypes>
+</items>

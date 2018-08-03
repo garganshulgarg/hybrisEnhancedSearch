@@ -1,0 +1,10 @@
+#Ant properties
+#Fri Dec 16 20:29:34 CET 2016
+builddate=20161216 2029
+description=enhancedSearch
+group.id=de.hybris.platform
+module.name=platform-module
+name=enhancedSearch
+vendor=hybris
+version=6.3.0.0-SNAPSHOT
+version.api=6.3.0

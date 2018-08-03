@@ -1,0 +1,69 @@
+$serverConfigName = contentSolrServerConfig
+$indexConfigName = contentSolrIndexConfig
+$searchConfigName = contentSolrSearchConfig
+$facetSearchConfigName = content-search
+$facetSearchDesc = Content Search
+$indexNamePrefix = contentIndex
+$solrIndexedType = contentSearch
+$indexLanguages = ja, en, de, zh
+$indexCurrencies = JPY, USD
+
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor = de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor]; pk[unique = true]
+#################### CONTENT SEARCH #############################
+
+#
+# Setup the Solr server, indexer, search configs and sorting
+#
+# Create the solr server configuration
+INSERT_UPDATE SolrServerConfig; name[unique = true]; mode(code)
+; $serverConfigName ; $config-solr.server.mode
+
+# Create the faceted search configuration
+INSERT_UPDATE SolrSearchConfig; description[unique = true]; pageSize
+; $searchConfigName ; 5
+
+# Create the solr indexer configuration
+INSERT_UPDATE SolrIndexConfig; name[unique = true]; batchSize; numberOfThreads; indexMode(code);
+; $indexConfigName ; 100 ; 1 ; TWO_PHASE ;
+
+INSERT_UPDATE SolrEndpointUrl;solrServerConfig(name)[unique=true];url[unique=true];master[unique=true,default=false]
+;$serverConfigName;http://localhost:8983/solr;true
+
+# Define the available sorts
+INSERT_UPDATE SolrSort; &sortRefID; indexedType(identifier)[unique = true]; code[unique = true]; useBoost
+; relevance ; $solrIndexedType ; relevance ; false
+
+# Define the sort fields
+INSERT_UPDATE SolrSortField; sort(indexedType(identifier), code)[unique = true]; fieldName[unique = true]; ascending[unique = true]
+; $solrIndexedType:relevance ; score ; false
+
+# Declare the indexed type as ContentPage
+INSERT_UPDATE SolrIndexedType; identifier[unique = true]; type(code); variant; sorts(&sortRefID)
+; $solrIndexedType ; ContentPage ; false ; relevance
+
+
+#Create a new SolrFacetSearchConfig
+INSERT_UPDATE SolrFacetSearchConfig; name[unique = true]; description; indexNamePrefix; languages(isocode); currencies(isocode); solrSearchConfig(description); solrServerConfig(name); solrIndexConfig(name); solrIndexedTypes(identifier); enabledLanguageFallbackMechanism
+; $facetSearchConfigName ; $facetSearchDesc ; $indexNamePrefix ; $indexLanguages ; $indexCurrencies ; $searchConfigName ; $serverConfigName ; $indexConfigName ; $solrIndexedType ; true
+
+
+#
+# Setup the indexed type
+#
+# Queries for indexing
+# FULL: Looks for all the contentPages where the searchType is set to contentSearch
+# UPDATE: Looks for contentPages where the searchType is set to contentSearch and either the contentPage or any of its ParagraphComponents have been modified since the last update.
+#		ParagraphComponents can be associated to the contentPage directly through ContentSlotsForPage or throught the Template and its contentSlotsForTemplate
+INSERT_UPDATE SolrIndexerQuery; solrIndexedType(identifier)[unique = true]; identifier[unique = true]; type(code); user(uid); injectCurrentDate[default = true]; injectCurrentTime[default = true]; injectLastIndexTime[default = true]; query
+; $solrIndexedType ; $solrIndexedType-fullQuery   ; full   ; anonymous ; false ; false ; false ; "SELECT {cp.pk} FROM {ContentPage as cp JOIN SearchType as st ON {cp.searchType} = {st.pk}} where {st.code} = 'contentSearch'"
+; $solrIndexedType ; $solrIndexedType-updateQuery ; update ; anonymous ; false ; false ; true  ; "SELECT contentPages.pk FROM ({{ SELECT DISTINCT {cp.pk} FROM {ContentPage as cp JOIN PageTemplate as pt ON {cp.masterTemplate} = {pt.pk} JOIN ContentSlotForTemplate as csft ON {csft.pageTemplate} = {pt.pk} JOIN ContentSlot as cs ON {csft.contentSlot} = {cs.pk} JOIN ElementsForSlot as efs ON {cs.pk} = {efs.source} JOIN CMSParagraphComponent as p ON {p.pk} = {efs.target} JOIN SearchType as st ON {cp.searchType} = {st.pk}} WHERE {st.code} = 'contentSearch' AND ({cp.modifiedtime} >= ?lastIndexTime OR {p.modifiedtime} >= ?lastIndexTime) }} UNION {{ SELECT DISTINCT {cp.pk} FROM {ContentPage as cp JOIN ContentSlotForPage as csfp ON {csfp.page} = {cp.pk} JOIN ContentSlot as cs ON {csfp.contentSlot} = {cs.pk} JOIN ElementsForSlot as efs ON {cs.pk} = {efs.source} JOIN CMSParagraphComponent as p ON {p.pk} = {efs.target} JOIN SearchType as st ON {cp.searchType} = {st.pk}} WHERE {st.code} = 'contentSearch' AND ({cp.modifiedtime} >= ?lastIndexTime OR {p.modifiedtime} >= ?lastIndexTime) }}) contentPages"
+
+
+# Indexed properties
+INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; name[unique = true]; type(code); sortableType(code); localized; currency; multiValue; useForSpellchecking; useForAutocomplete; fieldValueProvider; valueProviderParameter; categoryField
+; $solrIndexedType ; uid               ; string ; ; false ; false ; false ; false ; false ;                                 ; ; false
+; $solrIndexedType ; name              ; string ; ; false ; false ; false ; false ; false ;                                 ; ; false
+; $solrIndexedType ; label             ; string ; ; false ; false ; false ; false ; false ;                                 ; ; false
+; $solrIndexedType ; paragraphsContent ; text   ; ; true  ; false ; true  ; false ; false ; paragraphComponentValueProvider ; ;
