@@ -1,4 +1,4 @@
-# Enhancing Search Experience in SAP Hybris (SAP CX)
+# Enhancing Search Experience on SAP Hybris (SAP CX)
 This project aims for extending solr search delivered OOTB with SAP Hybris. This will majorly includes following:-
 * content search
 * pdf search
