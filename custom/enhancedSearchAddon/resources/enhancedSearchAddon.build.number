@@ -1,0 +1,11 @@
+#Ant properties
+#Fri Dec 16 19:48:42 UTC 2016
+builddate=20161216 1948
+description=enhancedSearchAddon
+group.id=de.hybris.platform
+module.name=platform-module
+name=enhancedSearchAddon
+releasedate=20161207 1619
+vendor=hybris
+version=6.3.0.0-SNAPSHOT
+version.api=6.3.0

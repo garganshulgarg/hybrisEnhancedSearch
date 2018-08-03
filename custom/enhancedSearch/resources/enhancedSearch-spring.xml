@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="enhancedSearchSystemSetup" class="com.custom.enhanced.search.setup.EnhancedSearchSystemSetup">
+        <!-- constructor arg injection example -->
+        <constructor-arg ref="enhancedSearchService"/>
+    </bean>
+
+    <bean id="enhancedSearchService" class="com.custom.enhanced.search.service.impl.DefaultEnhancedSearchService">
+        <!-- setter injection example -->
+        <property name="modelService" ref="modelService"/>
+        <property name="mediaService" ref="mediaService"/>
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+
+    <bean id="paragraphComponentValueProvider"
+          class="com.custom.enhanced.search.providers.impl.ParagraphComponentValueProvider"
+          parent="abstractPropertyFieldValueProvider">
+        <property name="fieldNameProvider" ref="solrFieldNameProvider"/>
+        <property name="contentSearchService" ref="contentSearchService"/>
+    </bean>
+
+    <bean id="contentSearchService" class="com.custom.enhanced.search.service.impl.ContentSearchServiceImpl">
+        <property name="contentSearchDao" ref="contentSearchDao"/>
+        <property name="contentSearchQueryPageableConverter" ref="contentSearchQueryPageableConverter" />
+        <property name="searchRequestConverter" ref="commerceSolrSearchRequestConverter"/>
+        <property name="contentSearchResponseConverter" ref="contentSolrSearchResponseConverter"/>
+    </bean>
+    <bean id="contentSearchDao" class="com.custom.enhanced.search.dao.impl.ContentSearchDaoImpl">
+        <property name="flexibleSearchService" ref="flexibleSearchService"/>
+    </bean>
+
+
+
+
+    <!-- Converter/populators for the ContentSolrSearchRequest -->
+    <alias name="defaultContentSearchQueryPageableConverter" alias="contentSearchQueryPageableConverter"/>
+    <bean id="defaultContentSearchQueryPageableConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass"
+                  value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchRequest"/>
+        <property name="populators">
+            <list>
+                <ref bean="contentSearchSolrQueryPopulator"/>
+                <ref bean="commerceSearchSortPopulator"/>
+                <ref bean="contentSearchTextPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="contentSearchSolrQueryPopulator" class="com.custom.enhanced.search.populators.ContentSearchSolrQueryPopulator">
+        <property name="baseSiteService" ref="baseSiteService"/>
+        <property name="cmsSiteService" ref="cmsSiteService"/>
+        <property name="catalogVersionService" ref="catalogVersionService"/>
+        <property name="commonI18NService" ref="commonI18NService"/>
+        <property name="facetSearchConfigConverter" ref="solrFacetSearchConfigConverter"/>
+    </bean>
+
+    <bean id="contentSearchTextPopulator"
+          class="de.hybris.platform.commerceservices.search.solrfacetsearch.populators.SearchTextPopulator">
+        <property name="freeTextQueryBuilders">
+            <list>
+                <bean class="com.custom.enhanced.search.querybuilder.impl.EnhancedSearchFreeTextQueryBuilder">
+                    <property name="propertyName" value="paragraphsContent" />
+                    <property name="textFieldSearchConfig">
+                        <map>
+                            <entry key="equals"	value="10"/>
+                            <entry key="wildcard" value="5"/>
+                            <entry key="fuzzy" value="2"/>
+                            <entry key="fuzzyProximity"	value="0.8"/>
+                        </map>
+                    </property>
+                    <property name="otherFieldSearchConfig">
+                        <map>
+                            <entry key="equals"	value="10"/>
+                            <entry key="wildcard" value="5"/>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contentSolrSearchResponseConverter" parent="abstractPopulatingConverter">
+        <property name="targetClass"
+                  value="de.hybris.platform.commerceservices.search.pagedata.SearchPageData"/>
+        <property name="populators">
+            <list>
+                <ref bean="commerceSearchResponseResultsPopulator"/>
+                <ref bean="commerceSearchResponseSortsPopulator"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>
