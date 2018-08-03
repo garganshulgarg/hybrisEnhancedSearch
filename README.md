@@ -1,5 +1,12 @@
 # hybrisEnhancedSearch
-This project aims for extending solr search delivered OOTB with SAP Hybris. This will majorly include content search, pdf search etc.
+This project aims for extending solr search delivered OOTB with SAP Hybris. This will majorly includes following:-
+* content search
+* pdf search
+* Category Suggestions Enhancements.
+
+Much More
+
+
 
 
 
