@@ -71,6 +71,22 @@ Link from <working_directory>/hybris/bin/custom/enhancedSearchAddon to <repo_dir
 
 ```
 
+### Install the b2c_acc recipe ###
+
+This is an optional step. If we are trying to run the same on Hybris OOTB setup then I have installed b2c_acc recipe.
+
+Move to directory <working_directory>/installer
+
+#### Windows Steps ####
+```
+install.bat -r b2c_acc
+```
+
+#### Mac Steps ####
+```
+./install.sh -r b2c_acc
+```
+
 #### Include EnhancedSearch Project ####
 ```
 
