@@ -212,9 +212,9 @@ install.bat -r b2c_acc
 
 ### Run a  on FULL solr index content-search  ###
 
-*Go to Backoffice > System > Search & Navigation > Facet Search Configurations. 
-*Select cotent-search.
-*Click Index option. In the popup select Full indexing and click Start.
+* Go to Backoffice > System > Search & Navigation > Facet Search Configurations. 
+* Select cotent-search.
+* Click Index option. In the popup select Full indexing and click Start.
 
 
 ### Modify the following files in your storefront extension to hold Content Searched Data ###
