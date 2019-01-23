@@ -67,3 +67,9 @@ INSERT_UPDATE SolrIndexedProperty; solrIndexedType(identifier)[unique = true]; n
 ; $solrIndexedType ; name              ; string ; ; false ; false ; false ; false ; false ;                                 ; ; false
 ; $solrIndexedType ; label             ; string ; ; false ; false ; false ; false ; false ;                                 ; ; false
 ; $solrIndexedType ; paragraphsContent ; text   ; ; true  ; false ; true  ; false ; false ; paragraphComponentValueProvider ; ;
+
+
+
+
+INSERT_UPDATE SolrFacetSearchConfig ;name[unique=true] ;catalogVersions(CatalogVersion.catalog(Catalog.id),CatalogVersion.version)
+;content-search ;electronicsContentCatalog:Staged, electronicsContentCatalog:Online

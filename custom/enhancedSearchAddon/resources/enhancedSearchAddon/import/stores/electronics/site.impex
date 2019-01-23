@@ -15,3 +15,8 @@ $defaultLanguage=en
 $storeUid=electronics
 $siteUid=electronics
 $webServiceSiteUid=$siteUidWS
+
+
+#associate content search configuration with sites
+INSERT_UPDATE CMSSite ;uid[unique=true] ;solrContentFacetSearchConfiguration(name)
+;$siteUid ;content-search
