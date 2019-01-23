@@ -10,8 +10,6 @@ Much More
 Just to have a quick glance refer the video on following Link.
 https://www.useloom.com/share/7f91e3a0c136422bb560bebe143f3c48
 
-Please ignore the UI for now !! will improve the same over the period of time.
-
 
 
 
@@ -150,5 +148,66 @@ Link from <working_directory>/hybris/bin/custom/enhancedSearchAddon to <repo_dir
     127.0.0.1       electronics.local
 
 ```
+
+
+### Some Sample Data Impex to be executed ###
+
+```
+    ;electronicsContentCatalog:Online ;homepage							    ;contentSearch
+;electronicsContentCatalog:Online ;multiStepCheckoutSummaryPage         ;contentSearch
+;electronicsContentCatalog:Online ;orderConfirmationPage                ;contentSearch
+;electronicsContentCatalog:Online ;cartPage                             ;contentSearch
+;electronicsContentCatalog:Online ;search                               ;contentSearch
+;electronicsContentCatalog:Online ;address-book                         ;contentSearch
+;electronicsContentCatalog:Online ;add-edit-address                     ;contentSearch
+;electronicsContentCatalog:Online ;payment-details                      ;contentSearch
+;electronicsContentCatalog:Online ;order                                ;contentSearch
+;electronicsContentCatalog:Online ;orders                               ;contentSearch
+;electronicsContentCatalog:Online ;storefinderPage                      ;contentSearch
+;electronicsContentCatalog:Online ;checkout-login                       ;contentSearch
+;electronicsContentCatalog:Online ;login                                ;contentSearch
+;electronicsContentCatalog:Online ;notFound                             ;contentSearch
+;electronicsContentCatalog:Online ;searchEmpty                          ;contentSearch
+;electronicsContentCatalog:Online ;updatePassword                       ;contentSearch
+;electronicsContentCatalog:Online ;update-profile                       ;contentSearch
+;electronicsContentCatalog:Online ;update-email                         ;contentSearch
+;electronicsContentCatalog:Online ;consents                             ;contentSearch
+;electronicsContentCatalog:Online ;close-account                        ;contentSearch
+;electronicsContentCatalog:Online ;faq                                  ;contentSearch
+;electronicsContentCatalog:Online ;orderExpired                         ;contentSearch
+;electronicsContentCatalog:Online ;termsAndConditions                   ;contentSearch
+;electronicsContentCatalog:Online ;importCSVSavedCartPage               ;contentSearch
+;electronicsContentCatalog:Online ;savedCartDetailsPage                 ;contentSearch
+;electronicsContentCatalog:Online ;saved-carts                          ;contentSearch
+;electronicsContentCatalog:Online ;quickOrderPage                       ;contentSearch
+;electronicsContentCatalog:Online ;product-textfield-configurator       ;contentSearch
+;electronicsContentCatalog:Online ;support-tickets                      ;contentSearch
+;electronicsContentCatalog:Online ;add-support-ticket                   ;contentSearch
+;electronicsContentCatalog:Online ;update-support-ticket                ;contentSearch
+;electronicsContentCatalog:Online ;cancel-order                         ;contentSearch
+;electronicsContentCatalog:Online ;confirm-cancel-order                 ;contentSearch
+;electronicsContentCatalog:Online ;return-order                         ;contentSearch
+;electronicsContentCatalog:Online ;confirm-return-order                 ;contentSearch
+;electronicsContentCatalog:Online ;returns                              ;contentSearch
+;electronicsContentCatalog:Online ;return-request-details               ;contentSearch
+;electronicsContentCatalog:Online ;cancel-return                        ;contentSearch
+
+```
+
+
+### Modify the following files in your storefront extension to hold Content Searched Data ###
+
+* searchEmptyPage.jsp
+* searchGridPage.jsp
+
+
+```
+<div style="padding: 0 30px 30px; max-width: 60%; text-align: left; margin: 0 auto;">
+   <c:forEach items="${contentSearchData}" var="data">
+       <a style="display: block; padding: 10px;  margin: 2px 0;" href="${request.contextPath}${data.label}">&raquo; ${data.name}</a>
+   </c:forEach>
+</div>
+```
+
 
 
